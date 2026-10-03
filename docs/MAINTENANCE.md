@@ -1,75 +1,54 @@
 # Maintenance
 
-## Version upgrades
+## Development
 
-The baseline is Twitch 31.3.0. Evaluate 31.4.2 on an upgrade branch while keeping the baseline available in Git. APKs, decompilations and evaluation results stay under `.local/`.
+Changes target `dev`. Keep fixes and features in separate commits, with tests for
+changed behavior. Merge `dev` into `main` with **Create a merge commit** for a
+stable release.
 
-1. Download an original APK or complete APKM from the Twitch publisher page on APKMirror. Include the required ABI and density splits and save it in `.local/inputs/`.
-2. Verify and decompile the candidate:
+## Verification
 
-   ```powershell
-   ./scripts/evaluate-update.ps1 -InputApk '.local/inputs/twitch.apkm' -ExpectedVersion '31.4.2' -Decompile
-   ```
+Run from the repository root:
 
-3. Review the original DEX and Hermes exports against the existing hook contracts. Use DEX to resolve ambiguous JADX output. Add the version to `TwitchTarget.kt` once the contracts match.
-4. Run the build and tests, then repeat the intake command with `-Patch` and the selected patch names. Review the full DEX rebuild and original-aware SDK reports in the resulting `.local/runs/` directory.
-5. Install with the existing signing key and test the player layouts, chat features, quality, reload, navigation and settings toggles. Check omitted-patch combinations when dependencies change.
-6. Test preroll and midroll opportunities. Check both playback and the ad overlay. Record interruptions, ads and incomplete checks.
-7. Update `config/compatibility.json` with the APK identity, tool versions, patch selection and device results, then merge the upgrade branch.
+```powershell
+./scripts/check-source.ps1
+./scripts/build.ps1
+./scripts/test.ps1
+npm.cmd test
+```
 
-The intake script verifies publisher signatures and package/version consistency. Patching and installation are separate steps. Keep earlier APKs, bundles and signing state for recovery.
+Bytecode changes also require a full APK rebuild, original-aware DEX verification
+and device testing. Record supported app versions and results in
+`config/compatibility.json`.
 
-## Development tools
+## Twitch version updates
 
-| Script | Purpose |
-| --- | --- |
-| `build.ps1` | Builds the patch bundle and runs extension tests. |
-| `test.ps1` | Runs Java/Kotlin tests and verifier regressions. |
-| `evaluate-update.ps1` | Verifies a candidate APK or bundle; optionally decompiles and patches it. |
-| `prepare-original.ps1` | Merges split bundles and checks original DEX preservation. |
-| `patch.ps1` | Applies the selected patches to an original APK. |
-| `verify-original-aware.ps1` | Compares patched verification findings with the original. |
+`scripts/evaluate-update.ps1` verifies an original APK or complete split bundle,
+records its identity and optionally decompiles or patches it. For example:
 
-`npm test` runs the React Native adapter tests. Each APK evaluation creates a separate local run directory.
+```powershell
+./scripts/evaluate-update.ps1 -InputApk '.local/inputs/twitch.apkm' -ExpectedVersion '31.4.2' -Decompile
+```
+
+Review the candidate's hooks before updating `TwitchTarget.kt`. Evaluate native
+and React Native playback, chat, settings and ad handling before declaring a
+version supported. Originals, signing keys and run artifacts stay under `.local/`.
 
 ## Releases
 
-The repository uses the [Morphe template's semantic-release pipeline](https://github.com/MorpheApp/morphe-patches-template). CI checks source hygiene, Java/Kotlin and JavaScript tests.
+The workflow uses semantic-release. With `PATCH_RELEASES_ENABLED=true`, pushes to
+`dev` publish prereleases and merges into `main` publish stable releases.
 
-- Target `dev` for development. `feat:` and `fix:` commits produce prereleases when publishing is enabled.
-- Merge `dev` into `main` normally, without squash, for a stable release.
-- Set `PATCH_RELEASES_ENABLED=true` when ready to publish. The workflow generates the changelog, patch list, bundle metadata and `.mpp` release assets.
-- Check the generated source and download links. Actions uses `GITHUB_REPOSITORY`; local builds can configure `patches.source`, `patches.author`, `patches.contact` and `patches.website` in user-level Gradle properties.
+| Commit type | Version change |
+| --- | --- |
+| `fix:`, `perf:`, `bump:` | Patch |
+| `feat:` | Minor |
+| `BREAKING CHANGE:` footer | Major |
+| `docs:`, `chore:` | None |
 
-Versions are calculated from commits since the last release. `fix:` and `perf:`
-increment the patch version; `feat:` increments the minor version. A breaking
-change recorded in a `BREAKING CHANGE:` footer increments the major version. `chore:`
-and `docs:` alone do not create a release. The highest increment wins when several
-changes are included.
+The highest version increment among the included commits wins. Commit subjects
+form the release notes. The workflow generates `CHANGELOG.md`, patch metadata and
+`.mpp` assets; public releases also receive build attestations.
 
-Use clear commit subjects to describe the actual changes. Each included subject
-becomes a release-note entry; commit bodies provide context in Git history.
-The workflow generates release notes from these commits and prepends them to `CHANGELOG.md`.
-For example, after 1.0.0 a `fix: restore Firebase push registration after patching`
-commit produces 1.0.1 on `main`, or 1.0.1-dev.1 on `dev`.
-
-Stable publication steps:
-
-1. Verify and commit the changes on `dev`.
-2. Push `dev` to run CI and create its prerelease when publishing is enabled.
-3. Open a pull request with base `main` and compare `dev`.
-4. Select **Create a merge commit** when merging. The push to `main` runs the stable release automatically.
-5. Check the resulting version, notes and `.mpp` asset in Releases.
-
-Artifact attestations run for public repositories. Private releases skip this
-step because private attestations require GitHub Enterprise Cloud.
-
-An existing release's prose can be edited through **Releases > Edit > Update
-release**. Keep its tag and asset version unchanged. Correct the corresponding
-historical entry in `CHANGELOG.md` as well so subsequent releases retain it.
-
-Run `npm audit` before enabling publication. The Node release dependencies have outstanding advisories.
-
-## Community listing
-
-After publishing a public release, request inclusion through the [community directory's Feedback form](https://morphe-patches.software/). Include the repository URL, release link, package `tv.twitch.android.app`, supported versions and a feature summary. Users can also add the repository directly as a Morphe source.
+Existing release notes can be edited in GitHub. Keep the corresponding historical
+`CHANGELOG.md` entry in sync and retain the release tag and asset version.
