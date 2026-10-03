@@ -78,3 +78,10 @@ patches/twitch/emotes/ThirdPartyEmotesPatch.kt and Fingerprints.kt.
 Changes: derived typed bridges replace fixed scratch-register assumptions;
 runtime catalogs, tokenization, rendering and image lifecycle are implemented
 in separate feature modules. The GPL-3.0 license is retained in LICENSE.
+
+Firebase Installations registration correction adapted from the notifications
+patches in arandomhooman/hoomans-morphe-patches (commit above) and bakwudo/uyu,
+commit a35ca594e26570607fe0c17c67651a44519e9ae2, GPL-3.0:
+https://github.com/bakwudo/uyu
+Changes: internal dependency, Firebase endpoint matching, strict header-call
+and register-liveness checks, label-preserving insertion and synthetic tests.

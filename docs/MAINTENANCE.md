@@ -41,6 +41,33 @@ The repository uses the [Morphe template's semantic-release pipeline](https://gi
 - Set `PATCH_RELEASES_ENABLED=true` when ready to publish. The workflow generates the changelog, patch list, bundle metadata and `.mpp` release assets.
 - Check the generated source and download links. Actions uses `GITHUB_REPOSITORY`; local builds can configure `patches.source`, `patches.author`, `patches.contact` and `patches.website` in user-level Gradle properties.
 
+Versions are calculated from commits since the last release. `fix:` and `perf:`
+increment the patch version; `feat:` increments the minor version. A breaking
+change recorded in a `BREAKING CHANGE:` footer increments the major version. `chore:`
+and `docs:` alone do not create a release. The highest increment wins when several
+changes are included.
+
+Use clear commit subjects to describe the actual changes. Each included subject
+becomes a release-note entry; commit bodies provide context in Git history.
+The workflow generates release notes from these commits and prepends them to `CHANGELOG.md`.
+For example, after 1.0.0 a `fix: restore Firebase push registration after patching`
+commit produces 1.0.1 on `main`, or 1.0.1-dev.1 on `dev`.
+
+Stable publication steps:
+
+1. Verify and commit the changes on `dev`.
+2. Push `dev` to run CI and create its prerelease when publishing is enabled.
+3. Open a pull request with base `main` and compare `dev`.
+4. Select **Create a merge commit** when merging. The push to `main` runs the stable release automatically.
+5. Check the resulting version, notes and `.mpp` asset in Releases.
+
+Artifact attestations run for public repositories. Private releases skip this
+step because private attestations require GitHub Enterprise Cloud.
+
+An existing release's prose can be edited through **Releases > Edit > Update
+release**. Keep its tag and asset version unchanged. Correct the corresponding
+historical entry in `CHANGELOG.md` as well so subsequent releases retain it.
+
 Run `npm audit` before enabling publication. The Node release dependencies have outstanding advisories.
 
 ## Community listing

@@ -54,6 +54,20 @@
           "BTTV/7TV emote preview works"
         ]
       },
+      "notificationRegistration": {
+        "date": "2026-10-04",
+        "appliedWithFeaturePatches": true,
+        "originalCertificateSha1": "8c68c13822723a2b1fa844bed340031beb1f9463",
+        "bundleSha256": "3c0522ecf33fcc452c204ea50076c70e988bf52ff6b8081b8307f2b8c9bf465e",
+        "apkSha256": "816e116a54fd5d27de70984fb1e96a8fe58e07a5273a757c82c2165e4fb2b6ca",
+        "syntheticHookTests": 7,
+        "fullDexRebuild": "passed",
+        "introducedHierarchyFindings": 0,
+        "typeContracts": 69,
+        "deviceInstall": "passed with existing signing key and app data",
+        "startup": "app running; no Firebase or crash errors in the observed buffer",
+        "livePushDelivery": "pending device confirmation"
+      },
       "observedFeatures": [
         "Bonus channel-point claiming in native and swipe-feed playback",
         "Feed-card removal and Turbo/discount promotion suppression",
