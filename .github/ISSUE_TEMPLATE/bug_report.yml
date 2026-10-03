@@ -1,48 +1,50 @@
-name: 🐞 Bug report
-description: Report a bug or an issue.
+name: Bug or ad report
+description: Report ads, broken features, crashes or missing player coverage.
 title: "bug: "
-labels: ["Bug report"]
+labels: [bug]
 body:
-  - type: markdown
+  - type: input
+    id: versions
     attributes:
-      value: |
-        # Patches template bug report
-
-        Before creating a new bug report, please keep the following in mind:
-
-        - **Do not submit a duplicate bug report**: Search for existing bug reports [here](https://github.com/TEMPLATE/template-patches-template/issues?q=label%3A%22Bug+report%22).
-        - **Review the contribution guidelines**: Make sure your bug report adheres to it. You can find the guidelines [here](https://github.com/TEMPLATE/template-patches-template/blob/main/CONTRIBUTING.md).
-  - type: textarea
+      label: Twitch and patch-bundle versions
+      description: Include the Twitch version and bundle version or build identifier.
+    validations:
+      required: true
+  - type: input
+    id: device
     attributes:
-      label: Bug description
-      description: |
-        - Describe your bug in detail
-        - Add steps to reproduce the bug if possible (Step 1. ... Step 2. ...)
-        - Add images and videos if possible
+      label: Device and Android version
     validations:
       required: true
   - type: textarea
+    id: selection
     attributes:
-      label: Error logs
-      description: Exceptions can be captured by running `logcat | grep AndroidRuntime` in a shell.
-      render: shell
-  - type: textarea
+      label: Selected patches and settings
+      description: Include patches applied to the APK and relevant runtime toggles.
+    validations:
+      required: true
+  - type: dropdown
+    id: player
     attributes:
-      label: Solution
-      description: If applicable, add a possible solution to the bug.
-  - type: textarea
-    attributes:
-      label: Additional context
-      description: Add additional context here.
-  - type: checkboxes
-    id: acknowledgements
-    attributes:
-      label: Acknowledgements
-      description: Your bug report will be closed if you don't follow the checklist below.
+      label: Player or app surface
       options:
-        - label: I have checked all open and closed bug reports and this is not a duplicate.
-          required: true
-        - label: I have chosen an appropriate title.
-          required: true
-        - label: All requested information has been provided properly.
-          required: true
+        - Classic Split with Vertical View option
+        - Vertical View
+        - Legacy Classic Split
+        - Swipe feed
+        - Settings or other surface
+        - Unknown
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Behavior and reproduction
+      description: Describe what happened and how to reproduce it. For ads, include the approximate time and whether you saw ad video, a countdown or a support banner.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Optional evidence
+      description: Logs, screenshots and channel information, if available.

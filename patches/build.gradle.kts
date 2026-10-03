@@ -1,23 +1,24 @@
-group = "app.template"
+group = "dev.twitchpatches"
 
 patches {
-    // TODO: Update this section with your project details.
     about {
-        name = "UserXYZ Patches"
-        description = "Patches for apps I like"
-        source = "git@github.com:UserXYZ/morphe-patches.git"
-        author = "Awesome dev"
-        contact = "na"
-        website = "na"
+        name = "Twitch patches"
+        description = "Independent patches for Twitch on Android, compatible with Morphe."
+        source = providers.gradleProperty("patches.source").orNull
+            ?: System.getenv("GITHUB_REPOSITORY")?.let { "https://github.com/$it" }
+            ?: "local:twitch-patches"
+        author = providers.gradleProperty("patches.author").orNull ?: "Contributors"
+        contact = providers.gradleProperty("patches.contact").orNull ?: ""
+        website = providers.gradleProperty("patches.website").orNull ?: ""
         license = "GPLv3"
     }
 }
 
-// Separate configuration so gson is available at runtime for the
-// generatePatchesList task but never bundled into the APK.
+
 val patchListGeneratorClasspath = configurations.create("patchListGeneratorClasspath")
 
 dependencies {
+    testImplementation("junit:junit:4.13.2")
     compileOnly(libs.gson)
     patchListGeneratorClasspath(libs.gson)
 }
@@ -32,7 +33,7 @@ tasks {
         mainClass.set("util.PatchListGeneratorKt")
     }
 
-    // Used by gradle-semantic-release-plugin.
+    // semantic-release entry point.
     publish {
         dependsOn("generatePatchesList")
     }

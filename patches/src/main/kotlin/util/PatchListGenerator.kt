@@ -14,14 +14,14 @@ import java.net.URLClassLoader
 import java.util.jar.Manifest
 
 fun main() {
-    val patchFiles = setOf(
-        File("build/libs/").listFiles { file ->
+    val candidates = File("build/libs/").listFiles { file ->
             val fileName = file.name
             !fileName.contains("javadoc") &&
                     !fileName.contains("sources") &&
                     fileName.endsWith(".mpp")
-        }!!.first()
-    )
+        }?.toList().orEmpty()
+    require(candidates.size == 1) { "Expected one bundle; clean stale build outputs first." }
+    val patchFiles = setOf(candidates.single())
     val loadedPatches = loadPatchesFromJar(patchFiles)
     val patchClassLoader = URLClassLoader(patchFiles.map { it.toURI().toURL() }.toTypedArray())
     val manifest = patchClassLoader.getResources("META-INF/MANIFEST.MF")
@@ -40,22 +40,19 @@ fun main() {
 private fun generatePatchList(version: String, patches: Set<Patch<*>>) {
     val listJson = File("../patches-list.json")
 
-    val patchesMap = patches.sortedBy { it.name }.map { patch ->
+    val patchesMap = patches.filter { it.name != null }.sortedBy { it.name }.map { patch ->
         JsonPatch(
-            name = patch.name!!,
+            name = requireNotNull(patch.name) { "Public patch has no name." },
             description = patch.description,
             default = patch.default,
             category = patch.category,
             dependencies = patch.dependencies.map { it.javaClass.simpleName },
-            // Map each Compatibility to a JsonCompatibility object with full metadata.
-            // Patches with null compatiblePackages are universal (apply to any app).
             compatiblePackages = patch.compatibility?.map { compat ->
                 JsonCompatibility(
-                    packageName = compat.packageName!!,
+                    packageName = requireNotNull(compat.packageName) { "Compatibility has no package name." },
                     name = compat.name,
                     description = compat.description,
                     apkFileType = compat.apkFileType?.name,
-                    // Format as #RRGGBB string for readability; null if not set
                     appIconColor = compat.appIconColor?.let { "#%06X".format(it) },
                     signatures = compat.signatures,
                     targets = compat.targets.map { target ->
@@ -102,16 +99,13 @@ private fun generatePatchList(version: String, patches: Set<Patch<*>>) {
     listJson.writeText(gson.toJson(jsonObject))
 }
 
-/** JSON representation of a patch entry in patches-list.json. */
 @Suppress("unused")
 private class JsonPatch(
     val name: String? = null,
     val description: String? = null,
     val default: Boolean = true,
-    /** Null when the patch declares no category and is left ungrouped. */
     val category: String? = null,
     val dependencies: List<String>,
-    /** Null means the patch is universal and applies to any app. */
     val compatiblePackages: List<JsonCompatibility>? = null,
     val options: List<Option>,
 ) {
@@ -126,20 +120,13 @@ private class JsonPatch(
     )
 }
 
-/** JSON representation of a compatible app entry, including name and per-version metadata. */
 @Suppress("unused")
 private class JsonCompatibility(
-    /** Android package name, e.g. com.google.android.youtube. */
     val packageName: String,
-    /** Human-readable app name declared in Compatibility, e.g. "YouTube". */
     val name: String?,
-    /** User-facing description of the app. */
     val description: String?,
-    /** Target unpatched app file type, e.g. APK, APKM. Null if not specified. */
     val apkFileType: String?,
-    /** App icon background color as #RRGGBB string, or null if not set. */
     val appIconColor: String?,
-    /** Valid SHA-256 signatures of the app. */
     val signatures: Set<String>?,
     val targets: List<Target>,
 ) {
@@ -147,9 +134,7 @@ private class JsonCompatibility(
         val version: String?,
         val versionCodes: Map<String, Int>?,
         val isExperimental: Boolean,
-        /** Minimum device SDK version. Null means any SDK version. */
         val minSdk: Int?,
-        /** Optional user-facing note about this specific version. */
         val description: String?,
     )
 }

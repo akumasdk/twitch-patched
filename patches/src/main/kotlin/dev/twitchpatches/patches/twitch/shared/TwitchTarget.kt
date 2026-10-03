@@ -1,0 +1,23 @@
+package dev.twitchpatches.patches.twitch.shared
+
+import app.morphe.patcher.patch.ApkFileType
+import app.morphe.patcher.patch.AppTarget
+import app.morphe.patcher.patch.Compatibility
+
+object TwitchTarget {
+    const val PACKAGE_NAME = "tv.twitch.android.app"
+    const val CANDIDATE_VERSION = "31.3.0"
+
+    val candidateCompatibility = Compatibility(
+        name = "Twitch",
+        packageName = PACKAGE_NAME,
+        apkFileType = ApkFileType.APKM,
+        targets = listOf(
+            AppTarget(
+                version = CANDIDATE_VERSION,
+                isExperimental = true,
+                description = "Evaluated on ARM64 with native and swipe-feed players.",
+            ),
+        ),
+    )
+}

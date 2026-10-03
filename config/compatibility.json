@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "packageName": "tv.twitch.android.app",
+  "targets": [
+    {
+      "versionName": "31.3.0",
+      "versionCode": 3103006,
+      "status": "evaluation",
+      "evaluatedAbis": [
+        "arm64-v8a"
+      ],
+      "deviceAndroidApis": [
+        33
+      ],
+      "original": {
+        "bundleSha256": "d56e057494aa7017feb2c95fa633885f27cf331fcca063380fcc474becd86bef",
+        "baseSha256": "798313fb7817548ebbcdb4c49c84076f8e98c930466d3338dcf700e4c254e77f",
+        "mergedSha256": "6b695f9acdb8a1400ec57740e26a037700d676d62dc130702129020ccca68ddf",
+        "signerCertificateSha256": "1338f9b049893cc70b78432a177582f90bd4bc6296ea4ed35bcc7df59687ac53"
+      },
+      "toolchain": {
+        "morpheDesktop": "1.18.0",
+        "jadx": "1.5.6",
+        "java": 21,
+        "androidBuildTools": "36.0.0"
+      },
+      "appliedPatches": [
+        "Auto-claim bonus channel points",
+        "Hide feed and display ads",
+        "Hide Turbo promotions",
+        "Hide subscription discount banners",
+        "Block stream ads",
+        "Playback diagnostics",
+        "BTTV and 7TV emotes",
+        "Reload stream"
+      ],
+      "verification": {
+        "javaKotlinTests": 131,
+        "javaScriptSuites": 7,
+        "standaloneVerifierTests": "passed",
+        "fullDexRebuild": "passed",
+        "sdkPerDexAndApkChecks": "passed",
+        "originalHierarchyFindings": 93,
+        "introducedHierarchyFindings": 0,
+        "typeContracts": 69,
+        "note": "Original-aware checks retain upstream hierarchy findings. Device results are feature-specific."
+      },
+      "evaluatedArtifact": {
+        "date": "2026-10-03",
+        "bundleSha256": "3f6f463a921a2d6b826d256c3ae6245c23bdbafe2c68187f32ee200e9f7a2e2a",
+        "apkSha256": "2042a7e1c716e23836740966c497a5cb7a7fc5606723ca5a2355b183f96dd223",
+        "postCleanupDeviceChecks": [
+          "Initial V2 Classic Split Reload works",
+          "BTTV/7TV emote preview works"
+        ]
+      },
+      "observedFeatures": [
+        "Bonus channel-point claiming in native and swipe-feed playback",
+        "Feed-card removal and Turbo/discount promotion suppression",
+        "BTTV/7TV rendering and previews in native and RN chat",
+        "Reload on initial V2 Classic Split, Vertical and RN playback",
+        "Stream replacement during observed preroll and midroll opportunities",
+        "Stream-ad and promotion toggles recover without restarting",
+        "Selected-feature settings and saved preferences across same-key updates"
+      ],
+      "remainingChecks": [
+        "Repeated ad opportunities and unmatched-media association failures",
+        "Native Reload toggles, quality conservation and extended lifecycle coverage",
+        "Rotation, accessibility, large fonts and light theme",
+        "Additional devices, ABIs and omitted-feature combinations"
+      ]
+    }
+  ],
+  "knownLimitations": {
+    "streamAds": "Unmatched-media midroll failure under investigation.",
+    "storyAds": "Not covered.",
+    "clientAdRequests": "Optional native path; incremental coverage is unverified and setting changes require a restart.",
+    "googlePlayBilling": "Unavailable in the evaluated re-signed app.",
+    "reload": "Native reload reuses the current SDK source."
+  },
+  "externalStreamProxy": false,
+  "upgradeCandidates": [
+    {
+      "versionName": "31.4.2",
+      "status": "not-evaluated"
+    }
+  ]
+}

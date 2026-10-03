@@ -1,91 +1,71 @@
-# 👋🧩 Morphe Patches template
+# Twitch patches
 
-Template repository for Morphe Patches.
+Independent patches for the official Twitch Android app, compatible with [Morphe](https://morphe.software/).
 
-## ❓ About
+## Features
 
-Patches for apps I like.
+Select each feature independently when patching. Included features appear under Twitch's **Settings > Patch settings**; omitted patches do not add settings.
 
-<!-- TODO: Update this about section with a brief introduction/summary about this repo and what it offers. -->
+| Patch | Behavior |
+| --- | --- |
+| Block stream ads | Replaces detected live-stream ads with direct Twitch playback from alternate player contexts. Prefers matching video quality. No external stream proxy. |
+| Hide feed and display ads | Removes sponsored feed cards and display ads using Twitch's no-ad responses. |
+| Hide Turbo promotions | Hides Turbo entries, upsells and purchase buttons. |
+| Hide subscription discount banners | Hides subscription offers and promotional labels, while retaining normal subscription actions. |
+| Auto-claim bonus channel points | Claims available bonus rewards in live playback. |
+| BTTV and 7TV emotes | Renders global and channel emotes in chat with provider previews on tap. |
+| Reload stream | Adds a reload button in live-player controls. Double-tap to reload. |
+| Block client-requested ads | Suppresses native ad requests. Restart Twitch after changing the setting. |
+| Playback diagnostics | Records playlist structure and playback frame counters. Disabled by default. |
+| Inspect Twitch APK | Reports package, version and DEX class count during patching. Does not change the app. |
 
-### How to use these patches
+## Compatibility
 
-Click here to add these patches to Morphe: https://morphe.software/add-source?github=xyz-user/xyz-patches
+The current development target is **Twitch 31.3.0 (3103006)**. Device evaluation covers ARM64 on Android 13, native players, Classic Split, Vertical View and the swipe feed. See [compatibility data](config/compatibility.json) for exact evidence and remaining checks.
 
-## 🩹 Patches list
+Ad blocking is under evaluation. Google Play billing is unavailable in the re-signed app.
 
-<!-- PATCHES_START EXPANDED -->
+Other versions and ABIs require their own hook and device verification.
 
-<!-- Do not modify this section by hand. The patch list is generated when release.yml creates a new release.
-     
-     If you wish for the patches list to be collapsed, then remove the word 'EXPANDED' from the comment tag above.
+31.4.2 is the next planned target.
 
-     If you wish to manually keep this list updated then remove the PATCHES_START and PATCHES_END 
-     comment blocks entirely. -->
+## Using the patches
 
-#### A list of your patches will automatically be shown here after your first patches release is created.
+Use an original Twitch APK or complete bundle matching the target version. Build a `.mpp` locally and apply it with [Morphe Desktop](https://github.com/MorpheApp/morphe-desktop), or add this repository as a Morphe source after a release is available. Releases contain `.mpp` patch bundles.
 
-&nbsp;
+## Building
 
-## 🚀 Getting development started
+Install Java 21, Node.js 24, PowerShell 7 and Android SDK Platform 36 with Build-Tools 36.0.0. GitHub Packages dependencies require read access configured through `gpr.user` and `gpr.key` in `~/.gradle/gradle.properties`.
 
-To start using this template, follow these steps:
+On Windows, run from the repository root:
 
-1. [Setup](https://github.com/MorpheApp/morphe-documentation/blob/main/docs/morphe-development/README.md) your development environment including adding a GitHub PAT as described [here](https://github.com/MorpheApp/morphe-patcher/blob/main/docs/2_1_setup.md#-prepare-the-environment).
-2. [Create a new repository using this template](https://github.com/new?template_name=morphe-patches-template&template_owner=MorpheApp). Select create a new repository, and **enable 'Include all branches'** 
-3. Enable "Allow GitHub Actions to create and approve pull requests" in your repo Settings > Actions > General > Workflow permissions
-4. Update the [build.gradle.kts](patches/build.gradle.kts) file (Specifically, the 
-   [group of the project](patches/build.gradle.kts#L1), and the [About](patches/build.gradle.kts#L6-L11))
-5. Update the [README.md](README.md) file to be specific of your repo, and update the links in the [issue templates](.github/ISSUE_TEMPLATE).
-6. Choose a name for your patches project. Keep in mind you must use a name that does not 
-   imply authorship by the Morphe open source project. If unsure, then simply name these
-   patches after yourself ("UserXYZ Morphe patches"). See the [NOTICE](NOTICE) for details. 
-7. (Optional): Add `patches-bundle.png` to the project if you want a custom icon to show in
-   Morphe Manager instead of your GitHub profile avatar.
+```powershell
+./scripts/bootstrap-tools.ps1
+./scripts/check-source.ps1
+./scripts/build.ps1
+./scripts/test.ps1
+npm.cmd ci
+npm.cmd test
+```
 
-🎉 You are now ready to start creating patches!
+The bundle is written to `patches/build/libs/patches-<version>.mpp`. The Gradle equivalent is `./gradlew buildAndroid`; Java/Kotlin tests run through `./gradlew :patches:test :extensions:twitch:testDebugUnitTest`.
 
-## 🧑‍💻 Dev usage
+## Contributing
 
-To develop and release your Patches using this template:
+Changes and feature proposals are welcome. Keep pull requests focused on one feature or fix and target `dev`. Follow [AGENTS.md](AGENTS.md) for architecture and hook requirements, and [maintenance instructions](docs/MAINTENANCE.md) for evaluation and releases.
 
-- **Make all changes to the `dev` branch.**
-- For local development work build your patches using the gradle task `./gradlew buildAndroid` to generate the mpp file found in `patches/build/libs/patches-*.mpp`. Apply your patches locally using Morphe Desktop tool like any other patch bundle.
-- Always use [Semantic commit](https://kapeli.com/cheat_sheets/Semantic_Commits.docset/Contents/Resources/Documents/index) messages for commits. To keep it simple use only 3 commit message types: 
-  - `feat: Added a new feature`
-  - `fix: Some problem now fixed`
-  - `chore: Random change you do not want in the user facing changelog`
-- Commits of `fix:` and `feat:` will automatically generate new pre-releases and `chore:` will not create a new release.
-- Users can apply your dev branch releases by enabling `pre-release` in Morphe Manager patch sources.
-- When your dev branch is ready, and you want a stable release, merge dev branch to main (do not squash, and only merge).
-- **Always use semantic release (release.yml)**. Do not manually upload or create releases by hand
-  because many files must be updated and release.yml handles everything.
+Include the app version, patch selection, tests and device results in your pull request.
 
-## 🤓 Tips
-- See the [patcher documentation](https://github.com/MorpheApp/morphe-patcher/blob/main/docs/1_patcher_intro.md) for more examples of creating patches and fingerprints.
-- Do not use AI to create new release scripts. The `release.yml` here already handles everything.
-  If you need omething custom with your releases then modify the existing `release.yml`
-  and `.releaserc` instead of writing everything new from scratch.
-- Do not manually edit or manually commit any generated files such as: `patches-list.json`,
-  `patches-bundle.json`, `CHANGELOG.md`.  These files will be automatically updated by `release.yml`.
-- Do not force push any semantic release commits as that will break all future releases.
-  If you need to fix a broken release, it's always easiest to create a new release instead of 
-  fixing an existing release.
+This patchset was developed with AI assistance for code generation, debugging and documentation.
 
+## Issues and feature requests
 
-<!-- The patches end tag is intentionally placed here so the first release will clean up 
-     this readme of all developer instructions above. -->
-<!-- PATCHES_END -->
+Use this repository's Issues tab to report ads, bugs, missing UI coverage or request a feature. Reports of any ad that appears are welcome.
 
-### 🛠️ Building locally
+Include Twitch and patch-bundle versions, Android version, enabled patches, player layout, approximate time and reproduction steps. For ads, distinguish ad video from a stale countdown or support banner. Channel and screenshots are optional.
 
-- Run `./gradlew buildAndroid`
-- The built patches .mpp file is found in `patches/build/libs/patches-*.mpp`
-- Patch the mpp file using [Morphe-Desktop](https://github.com/MorpheApp/morphe-desktop)
-  like any other patch bundle.
+Search existing issues before opening a report.
 
-See the [Morphe documentation](https://github.com/MorpheApp/morphe-documentation) for more information.
+## License
 
-## 📜 License
-
-UserXYZ Patches are licensed under the [GNU General Public License v3.0](LICENSE)
+[GPL-3.0](LICENSE), with upstream attribution and naming terms in [NOTICE](NOTICE). Additional retained licenses are under `licenses/` and `patches/src/main/resources/hermes/`. This project is independent of Twitch and the Morphe project.
