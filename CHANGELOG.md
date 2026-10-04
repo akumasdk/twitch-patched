@@ -1,3 +1,10 @@
+## [1.0.3-dev.1](https://github.com/ryykitty/twitch-patched/compare/v1.0.2...v1.0.3-dev.1) (2026-10-04)
+
+### Bug Fixes
+
+* recognize tested Twitch versions as supported ([d0f67f9](https://github.com/ryykitty/twitch-patched/commit/d0f67f9cf8c922904bfda9aaa292506a01426701))
+* support XML resource parsing in Morphe Manager ([bcb4fbd](https://github.com/ryykitty/twitch-patched/commit/bcb4fbd4836675c643fcda26a59bcbdd029946c4))
+
 ## [1.0.2](https://github.com/ryykitty/twitch-patched/compare/v1.0.1...v1.0.2) (2026-10-04)
 
 ### Bug Fixes
