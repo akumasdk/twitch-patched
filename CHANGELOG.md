@@ -1,8 +1,16 @@
-## [1.0.1](https://github.com/ryykitty/twitch-patched/compare/v1.0.0...v1.0.1) (2026-10-04)
+## [1.0.2-dev.1](https://github.com/ryykitty/twitch-patched/compare/v1.0.1...v1.0.2-dev.1) (2026-10-04)
 
 ### Bug Fixes
 
-* restore Firebase push registration after patching ([b72dbef](https://github.com/ryykitty/twitch-patched/commit/b72dbef984f2239642be5897cdbf908580cca324))
+* **build:** preserve Android patch bundles during verification ([ea2bbe8](https://github.com/ryykitty/twitch-patched/commit/ea2bbe8a0ffcf63acb3cb1430f10b3252e0f6eb0))
+* **build:** select the current bundle for release metadata ([03ea818](https://github.com/ryykitty/twitch-patched/commit/03ea8188328b4ee65a23cc8f388047c5bcabf5f4))
+* clarify patch descriptions ([e1971f0](https://github.com/ryykitty/twitch-patched/commit/e1971f0383e88542debb103893fd4a57b8c40119))
+* prevent overlapping release publication ([d110ebe](https://github.com/ryykitty/twitch-patched/commit/d110ebe87ac2184b344e02821254997a04b1e64f))
+* update settings, chat and ad hooks for Twitch 31.4.2 ([a9b9638](https://github.com/ryykitty/twitch-patched/commit/a9b9638344434884d4c0f7193b5be0f2b66b35d7))
+
+### App Support
+
+* add Twitch 31.4.2 compatibility ([db8637b](https://github.com/ryykitty/twitch-patched/commit/db8637bc938ad0d3a25c784b6dc6723128300928))
 
 ## [1.0.1](https://github.com/ryykitty/twitch-patched/compare/v1.0.0...v1.0.1) (2026-10-04)
 
@@ -26,16 +34,16 @@
 - **Hide subscription discount banners:** remove subscription offers and promotional labels while retaining normal subscription actions.
 - **Auto-claim bonus channel points:** claim available bonus rewards during live playback.
 - **BTTV and 7TV emotes:** render global and channel emotes in chat and show provider previews on tap.
-- **Reload stream:** add a double-tap reload control to native, Classic Split, Vertical View and swipe-feed players, with a single-tap hint.
+- **Reload stream:** reload live streams with a double-tap control.
 - **Block client-requested ads:** optionally suppress native ad requests.
 - **Playback diagnostics:** provide playlist and playback diagnostics, disabled by default.
 - **Inspect Twitch APK:** report package, version and DEX information without modifying the APK.
 
 ### Integration
 
-- Add a native-style Patch settings page containing only the selected features, with saved preferences across same-key updates.
-- Preserve Twitch's native and React Native player and chat paths, including V2 emote previews and Reload on initial Classic Split entry.
-- Include reproducible build, test and APK evaluation tools, synthetic hook tests and original-aware DEX verification.
+- Add a Patch settings page for selected features.
+- Support native and swipe-feed playback and chat.
+- Include build, test and APK verification tools.
 
 ### Compatibility
 

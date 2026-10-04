@@ -10,7 +10,7 @@ import dev.twitchpatches.patches.twitch.shared.reactNativeBridgePatch
 @Suppress("unused")
 val autoClaimChannelPointsPatch = bytecodePatch(
     name = "Auto-claim bonus channel points",
-    description = "Claims available bonus channel points in native and swipe-feed playback.",
+    description = "Claims available bonus rewards in live playback.",
     default = true,
 ) {
     compatibleWith(TwitchTarget.candidateCompatibility)

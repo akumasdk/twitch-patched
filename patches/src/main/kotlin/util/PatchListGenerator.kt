@@ -10,29 +10,23 @@ import app.morphe.patcher.patch.loadPatchesFromJar
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import java.io.File
-import java.net.URLClassLoader
-import java.util.jar.Manifest
+import java.util.jar.JarFile
 
-fun main() {
-    val candidates = File("build/libs/").listFiles { file ->
-            val fileName = file.name
-            !fileName.contains("javadoc") &&
-                    !fileName.contains("sources") &&
-                    fileName.endsWith(".mpp")
-        }?.toList().orEmpty()
-    require(candidates.size == 1) { "Expected one bundle; clean stale build outputs first." }
-    val patchFiles = setOf(candidates.single())
-    val loadedPatches = loadPatchesFromJar(patchFiles)
-    val patchClassLoader = URLClassLoader(patchFiles.map { it.toURI().toURL() }.toTypedArray())
-    val manifest = patchClassLoader.getResources("META-INF/MANIFEST.MF")
+fun main(args: Array<String>) {
+    require(args.size == 1) { "Expected the current patch bundle path." }
+    val bundle = File(args.single())
+    val version = readBundleVersion(bundle)
+    generatePatchList(version, loadPatchesFromJar(setOf(bundle)))
+}
 
-    while (manifest.hasMoreElements()) {
-        Manifest(manifest.nextElement().openStream())
-            .mainAttributes
-            .getValue("Version")
-            ?.let {
-                generatePatchList(it, loadedPatches)
-            }
+internal fun readBundleVersion(bundle: File): String {
+    require(bundle.isFile && bundle.extension == "mpp") {
+        "Patch bundle is missing or invalid: ${bundle.name}"
+    }
+    return JarFile(bundle).use { archive ->
+        requireNotNull(archive.manifest?.mainAttributes?.getValue("Version")?.takeIf { it.isNotBlank() }) {
+            "Patch bundle has no version: ${bundle.name}"
+        }
     }
 }
 

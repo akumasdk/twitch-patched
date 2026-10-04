@@ -4,7 +4,7 @@ param()
 $env:ANDROID_HOME = Get-AndroidSdk
 Push-Location $script:ProjectRoot
 try {
-    & (Get-ProjectPath 'gradlew.bat') ':patches:test' ':extensions:twitch:testDebugUnitTest' '--console=plain' '--no-daemon'
+    & (Get-ProjectPath 'gradlew.bat') ':patches:test' ':extensions:twitch:testDebugUnitTest' ':patches:buildAndroid' '--console=plain' '--no-daemon'
     if ($LASTEXITCODE -ne 0) { throw 'Feature/DEX tests failed.' }
     $run = New-RunDirectory 'tests'
     $morphe = Get-MorphePath

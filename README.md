@@ -19,22 +19,30 @@ Select each feature independently when patching. Included features appear under 
 | Playback diagnostics | Records playlist structure and playback frame counters. Disabled by default. |
 | Inspect Twitch APK | Reports package, version and DEX class count during patching. Does not change the app. |
 
-Feature patches include Firebase registration compatibility for the re-signed
-app. This is applied automatically, without a separate patch or setting.
+Push notification registration is included automatically with feature patches.
 
 ## Compatibility
 
-The current development target is **Twitch 31.3.0 (3103006)**. Device evaluation covers ARM64 on Android 13, native players, Classic Split, Vertical View and the swipe feed. See [compatibility data](config/compatibility.json) for exact evidence and remaining checks.
+Supported Twitch versions:
+
+| Version | Version code |
+| --- | --- |
+| 31.4.2 | 3104026 |
+| 31.3.0 | 3103006 |
+
+Both versions have passed patching and DEX verification. Device testing uses ARM64 on Android 13. Initial checks for 31.4.2 cover settings, stream reloading, emotes and ad blocking; extended testing is ongoing. See [compatibility data](config/compatibility.json) for verification results and remaining checks.
 
 Ad blocking is under evaluation. Google Play billing is unavailable in the re-signed app.
 
 Other versions and ABIs require their own hook and device verification.
 
-31.4.2 is the next planned target.
-
 ## Using the patches
 
-Use an original Twitch APK or complete bundle matching the target version. Build a `.mpp` locally and apply it with [Morphe Desktop](https://github.com/MorpheApp/morphe-desktop), or add this repository as a Morphe source after a release is available. Releases contain `.mpp` patch bundles.
+1. [Add this patch source to Morphe](https://morphe.software/add-source?github=ryykitty/twitch-patched).
+2. Enable **Experimental app versions** in the source settings while compatibility testing is ongoing.
+3. Select an original Twitch APK matching a supported version, choose the patches and install the result.
+
+[Releases](https://github.com/ryykitty/twitch-patched/releases) contain `.mpp` patch bundles. These can also be built locally and applied with [Morphe Desktop](https://github.com/MorpheApp/morphe-desktop), using an original APK or complete split bundle.
 
 ## Building
 
@@ -51,7 +59,7 @@ npm.cmd ci
 npm.cmd test
 ```
 
-The bundle is written to `patches/build/libs/patches-<version>.mpp`. The Gradle equivalent is `./gradlew buildAndroid`; Java/Kotlin tests run through `./gradlew :patches:test :extensions:twitch:testDebugUnitTest`.
+The bundle is written to `patches/build/libs/patches-<version>.mpp`. The Gradle equivalent is `./gradlew buildAndroid`; Java/Kotlin tests run through `./gradlew :patches:test :extensions:twitch:testDebugUnitTest :patches:buildAndroid`.
 
 ## Contributing
 
