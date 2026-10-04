@@ -34,6 +34,9 @@ Review the candidate's hooks before updating `TwitchTarget.kt`. Evaluate native
 and React Native playback, chat, settings and ad handling before declaring a
 version supported. Originals, signing keys and run artifacts stay under `.local/`.
 
+See [the upgrade workflow](UPGRADES.md) for repository synchronization, baseline
+checkpoints, device recovery and overnight acceptance checks.
+
 ## Releases
 
 The workflow uses semantic-release. With `PATCH_RELEASES_ENABLED=true`, pushes to
