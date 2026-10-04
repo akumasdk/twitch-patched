@@ -17,7 +17,7 @@ private const val BANNER_POLICY = "Ldev/twitchpatches/extension/promotions/Subsc
 @Suppress("unused")
 val hideSubscriptionBannersPatch = bytecodePatch(
     name = "Hide subscription discount banners",
-    description = "Hides subscription offers and promotional labels while retaining subscription actions and train announcements.",
+    description = "Hides subscription offers and promotional labels, while retaining normal subscription actions.",
     default = true,
 ) {
     compatibleWith(TwitchTarget.candidateCompatibility)

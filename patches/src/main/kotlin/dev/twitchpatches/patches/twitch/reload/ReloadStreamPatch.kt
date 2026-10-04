@@ -8,7 +8,7 @@ import dev.twitchpatches.patches.twitch.shared.*
 @Suppress("unused")
 val reloadStreamPatch = bytecodePatch(
     name = "Reload stream",
-    description = "Adds a button beside volume in live-player controls. Double-tap to reload; a single tap shows a hint.",
+    description = "Adds a reload button in live-player controls. Double-tap to reload.",
     default = true,
 ) {
     compatibleWith(TwitchTarget.candidateCompatibility)

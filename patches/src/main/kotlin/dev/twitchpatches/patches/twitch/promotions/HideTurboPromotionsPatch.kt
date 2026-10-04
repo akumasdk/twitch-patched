@@ -26,7 +26,7 @@ private const val POLICY = "Ldev/twitchpatches/extension/promotions/PromotionSet
 @Suppress("unused")
 val hideTurboPromotionsPatch = bytecodePatch(
     name = "Hide Turbo promotions",
-    description = "Hides Turbo entries and upsells while retaining Drops progress and train announcements.",
+    description = "Hides Turbo entries, upsells and purchase buttons.",
     default = true,
 ) {
     compatibleWith(TwitchTarget.candidateCompatibility)

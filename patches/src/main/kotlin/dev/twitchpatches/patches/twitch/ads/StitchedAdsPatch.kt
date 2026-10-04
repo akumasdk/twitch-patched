@@ -10,7 +10,8 @@ import dev.twitchpatches.patches.twitch.shared.IVS_NET
 @Suppress("unused")
 val blockStitchedAdsPatch = bytecodePatch(
     name = "Block stream ads",
-    description = "Replaces detected live-stream ads with alternate direct Twitch playback, preferring matching quality.",
+    description = "Replaces detected live-stream ads with direct Twitch playback from alternate player contexts. " +
+        "Prefers matching video quality. No external stream proxy.",
     default = false,
 ) {
     compatibleWith(TwitchTarget.candidateCompatibility)
