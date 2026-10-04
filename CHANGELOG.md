@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/ryykitty/twitch-patched/compare/v1.0.3...v1.0.4) (2026-10-04)
+
+### Bug Fixes
+
+* display Twitch 31.4.2 in the community directory ([bc6dd9f](https://github.com/ryykitty/twitch-patched/commit/bc6dd9f64c5964c1ee9c7373a836cc339bcc353a))
+* select and enable ad blockers by default ([b371d8b](https://github.com/ryykitty/twitch-patched/commit/b371d8bf85ff518e6d52ae7458de7b05235829df))
+
 ## [1.0.3](https://github.com/ryykitty/twitch-patched/compare/v1.0.2...v1.0.3) (2026-10-04)
 
 ### Bug Fixes
