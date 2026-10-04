@@ -1,3 +1,17 @@
+## [1.0.2](https://github.com/ryykitty/twitch-patched/compare/v1.0.1...v1.0.2) (2026-10-04)
+
+### Bug Fixes
+
+* **build:** preserve Android patch bundles during verification ([ea2bbe8](https://github.com/ryykitty/twitch-patched/commit/ea2bbe8a0ffcf63acb3cb1430f10b3252e0f6eb0))
+* **build:** select the current bundle for release metadata ([03ea818](https://github.com/ryykitty/twitch-patched/commit/03ea8188328b4ee65a23cc8f388047c5bcabf5f4))
+* clarify patch descriptions ([e1971f0](https://github.com/ryykitty/twitch-patched/commit/e1971f0383e88542debb103893fd4a57b8c40119))
+* prevent overlapping release publication ([d110ebe](https://github.com/ryykitty/twitch-patched/commit/d110ebe87ac2184b344e02821254997a04b1e64f))
+* update settings, chat and ad hooks for Twitch 31.4.2 ([a9b9638](https://github.com/ryykitty/twitch-patched/commit/a9b9638344434884d4c0f7193b5be0f2b66b35d7))
+
+### App Support
+
+* add Twitch 31.4.2 compatibility ([db8637b](https://github.com/ryykitty/twitch-patched/commit/db8637bc938ad0d3a25c784b6dc6723128300928))
+
 ## [1.0.2-dev.1](https://github.com/ryykitty/twitch-patched/compare/v1.0.1...v1.0.2-dev.1) (2026-10-04)
 
 ### Bug Fixes
