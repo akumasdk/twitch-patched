@@ -10,7 +10,6 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import dev.twitchpatches.patches.twitch.shared.*
-import javax.xml.parsers.DocumentBuilderFactory
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 
@@ -33,10 +32,7 @@ internal fun validateNativeEmoteHeader(document: Document) {
 
 private val nativeEmoteResources = resourcePatch {
     execute {
-        val factory = DocumentBuilderFactory.newInstance().apply {
-            setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
-        }
-        val public = get("res/values/public.xml").inputStream().use { factory.newDocumentBuilder().parse(it) }
+        val public = parseResourceXml(get("res/values/public.xml").readText())
         val nodes = public.getElementsByTagName("public")
         val symbols = (0 until nodes.length).mapNotNull { nodes.item(it) as? Element }
         nativePreviewIds = listOf("layout" to "emote_card_dialog", "id" to "emote_card_loaded_content",
@@ -44,9 +40,7 @@ private val nativeEmoteResources = resourcePatch {
             symbols.filter { it.getAttribute("type") == type && it.getAttribute("name") == name }
                 .uniqueHook("native emote $type/$name").getAttribute("id").removePrefix("0x").toLong(16).toInt()
         }
-        get("res/layout/emote_card_dialog.xml").inputStream().use {
-            validateNativeEmoteHeader(factory.newDocumentBuilder().parse(it))
-        }
+        validateNativeEmoteHeader(parseResourceXml(get("res/layout/emote_card_dialog.xml").readText()))
     }
 }
 

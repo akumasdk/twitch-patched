@@ -39,8 +39,7 @@ Other versions and ABIs require their own hook and device verification.
 ## Using the patches
 
 1. [Add this patch source to Morphe](https://morphe.software/add-source?github=ryykitty/twitch-patched).
-2. Enable **Experimental app versions** in the source settings while compatibility testing is ongoing.
-3. Select an original Twitch APK matching a supported version, choose the patches and install the result.
+2. Select an original Twitch APK matching a supported version, choose the patches and install the result.
 
 [Releases](https://github.com/ryykitty/twitch-patched/releases) contain `.mpp` patch bundles. These can also be built locally and applied with [Morphe Desktop](https://github.com/MorpheApp/morphe-desktop), using an original APK or complete split bundle.
 

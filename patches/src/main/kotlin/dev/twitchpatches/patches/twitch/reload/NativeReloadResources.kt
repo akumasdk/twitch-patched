@@ -2,7 +2,7 @@ package dev.twitchpatches.patches.twitch.reload
 
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.resourcePatch
-import javax.xml.parsers.DocumentBuilderFactory
+import dev.twitchpatches.patches.twitch.shared.parseResourceXml
 import org.w3c.dom.Element
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
@@ -15,10 +15,7 @@ internal var nativePlaybackContainer = 0
 
 internal val nativeReloadResources = resourcePatch {
     execute {
-        val factory = DocumentBuilderFactory.newInstance().apply {
-            setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
-        }
-        val document = get("res/values/public.xml").inputStream().use { factory.newDocumentBuilder().parse(it) }
+        val document = parseResourceXml(get("res/values/public.xml").readText())
         val nodes = document.getElementsByTagName("public")
         val symbols = (0 until nodes.length).mapNotNull { nodes.item(it) as? Element }
         fun id(type: String, name: String): Long {
@@ -33,7 +30,7 @@ internal val nativeReloadResources = resourcePatch {
         for ((name, constrained) in listOf("bottom_player_overlay_controls" to true,
             "bottom_player_control_overlay_widget" to false)) {
             val file = get("res/layout/$name.xml")
-            val layout = file.inputStream().use { factory.newDocumentBuilder().parse(it) }
+            val layout = parseResourceXml(file.readText())
             insertNativeReloadLayout(layout, constrained)
             file.outputStream().use { output ->
                 TransformerFactory.newInstance().newTransformer().transform(DOMSource(layout), StreamResult(output))

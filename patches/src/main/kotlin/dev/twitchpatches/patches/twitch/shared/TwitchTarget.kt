@@ -15,12 +15,12 @@ object TwitchTarget {
         targets = listOf(
             AppTarget(
                 version = CANDIDATE_VERSION,
-                isExperimental = true,
-                description = "ARM64 evaluation; extended device testing pending.",
+                isExperimental = false,
+                description = "Tested on ARM64 with native and swipe-feed players.",
             ),
             AppTarget(
                 version = "31.3.0",
-                isExperimental = true,
+                isExperimental = false,
                 description = "Evaluated on ARM64 with native and swipe-feed players.",
             ),
         ),

@@ -5,7 +5,7 @@
     {
       "versionName": "31.4.2",
       "versionCode": 3104026,
-      "status": "evaluation",
+      "status": "supported",
       "evaluatedAbis": [
         "arm64-v8a"
       ],
@@ -110,7 +110,7 @@
     {
       "versionName": "31.3.0",
       "versionCode": 3103006,
-      "status": "evaluation",
+      "status": "supported",
       "evaluatedAbis": [
         "arm64-v8a"
       ],
@@ -206,10 +206,39 @@
     "reload": "Native reload reuses the current SDK source."
   },
   "externalStreamProxy": false,
-  "upgradeCandidates": [
-    {
-      "versionName": "31.4.2",
-      "status": "not-evaluated"
-    }
-  ]
+  "upgradeCandidates": [],
+  "patchingVerification": {
+    "date": "2026-10-05",
+    "morpheManager": "1.33.0",
+    "javaKotlinTests": 152,
+    "javaScriptTests": 12,
+    "androidResourceParsing": {
+      "androidApis": [
+        33,
+        37
+      ],
+      "factory": "org.apache.harmony.xml.parsers.DocumentBuilderFactoryImpl",
+      "scope": "XML parsing and resource validators executed on Android using the Morphe Manager classpath.",
+      "result": "Original parser exception reproduced; settings, emote preview and reload resource checks passed.",
+      "externalEntities": "DTD and entity declarations rejected before parsing."
+    },
+    "desktopRebuilds": [
+      {
+        "versionName": "31.4.2",
+        "bundleSha256": "6c3b5f37a886f656ca0dd61cc31c52d069a3362851552b00e686fab617fa53e9",
+        "apkSha256": "d74f7118d5463c307e165aefffd8508fa89857b3e697c05c51fabb7fea82a604",
+        "patchesApplied": 10,
+        "fullDexRebuild": "passed",
+        "originalAwareAudit": "passed; zero introduced findings"
+      },
+      {
+        "versionName": "31.3.0",
+        "bundleSha256": "6c3b5f37a886f656ca0dd61cc31c52d069a3362851552b00e686fab617fa53e9",
+        "apkSha256": "3a2ea1209f08b5d48a33eacc0d7ce7d816ecc823dc4a3b7f66803a8182dbe3a5",
+        "patchesApplied": 10,
+        "fullDexRebuild": "passed",
+        "originalAwareAudit": "passed; zero introduced findings"
+      }
+    ]
+  }
 }
