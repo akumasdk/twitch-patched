@@ -66,7 +66,7 @@
         "typeContracts": 69,
         "deviceInstall": "passed with existing signing key and app data",
         "startup": "app running; no Firebase or crash errors in the observed buffer",
-        "livePushDelivery": "pending device confirmation"
+        "livePushDelivery": "confirmed on Android 13; receiver process start to live-notification posting: 3.8 seconds"
       },
       "observedFeatures": [
         "Bonus channel-point claiming in native and swipe-feed playback",
