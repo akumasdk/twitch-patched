@@ -28,7 +28,7 @@ public final class AdSettings {
             if (instance == null) instance = new AdSettings(application);
             if (feature < 0 || feature >= KEYS.length || instance.selected[feature]) return;
             instance.selected[feature] = true;
-            instance.enabled[feature] = instance.preferences.getBoolean(KEYS[feature], feature != 2);
+            instance.enabled[feature] = instance.preferences.getBoolean(KEYS[feature], true);
         }
         if (feature == 1) ReactNativeRuntime.select(3);
         if (feature == 2) ReactNativeRuntime.select(5);

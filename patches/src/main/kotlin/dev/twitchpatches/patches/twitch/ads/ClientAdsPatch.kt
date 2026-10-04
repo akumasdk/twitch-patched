@@ -11,7 +11,7 @@ import dev.twitchpatches.patches.twitch.shared.*
 val blockClientAdsPatch = bytecodePatch(
     name = "Block client-requested ads",
     description = "Suppresses native ad requests. Restart Twitch after changing the setting.",
-    default = false,
+    default = true,
 ) {
     compatibleWith(TwitchTarget.candidateCompatibility)
     dependsOn(settingsPatch)

@@ -12,7 +12,7 @@ val blockStitchedAdsPatch = bytecodePatch(
     name = "Block stream ads",
     description = "Replaces detected live-stream ads with direct Twitch playback from alternate player contexts. " +
         "Prefers matching video quality. No external stream proxy.",
-    default = false,
+    default = true,
 ) {
     compatibleWith(TwitchTarget.candidateCompatibility)
     dependsOn(settingsPatch, reactNativeStreamAdsPatch)
