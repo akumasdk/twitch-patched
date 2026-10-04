@@ -17,6 +17,7 @@ import dev.twitchpatches.patches.twitch.shared.*
 internal const val EMOTES = "Ldev/twitchpatches/extension/emotes/EmoteRuntime;"
 internal const val TEXT_SETTER = "Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;Landroid/widget/TextView\$BufferType;)V"
 private const val CONNECTION = "Ltv/twitch/android/shared/chat/pub/messages/data/ChannelChatConnectionKey;"
+internal const val CHANNEL_ID = "Ltv/twitch/android/models/Tuid;"
 
 internal data class EmoteHooks(val connection: Method, val binder: Method, val setterIndex: Int,
     val source: FieldReference, val textView: FieldReference)
@@ -39,10 +40,28 @@ internal fun BytecodePatchContext.resolveEmoteHooks(): EmoteHooks {
     val declaration = owner.fields.filter { it.name == field.name && it.type == field.type }.uniqueHook("chat text field declaration")
     if (AccessFlags.STATIC.isSet(declaration.accessFlags) || AccessFlags.PRIVATE.isSet(declaration.accessFlags))
         throw PatchException("Emotes: chat text field is inaccessible to the typed bridge.")
-    val connection = classDefBy(CONNECTION).methods.filter { it.name == "<init>" &&
-            it.isInstance(listOf("Ljava/lang/String;", "Ljava/lang/String;"), "V") }.uniqueHook("chat connection constructor")
+    val connection = classDefBy(CONNECTION).methods.filter {
+        it.name == "<init>" && it.parameterTypes.size == 2 &&
+            it.parameterTypes[0].toString() in setOf("Ljava/lang/String;", CHANNEL_ID) &&
+            it.isInstance(listOf(it.parameterTypes[0].toString(), "Ljava/lang/String;"), "V")
+    }.uniqueHook("chat connection constructor")
+    validateEmoteConnection(connection)
+    if (connection.parameterTypes[0].toString() == CHANNEL_ID) {
+        classDefBy(CHANNEL_ID).methods.filter { it.name == "toString" &&
+            it.isInstance(emptyList(), "Ljava/lang/String;") && AccessFlags.PUBLIC.isSet(it.accessFlags)
+        }.uniqueHook("chat channel ID string conversion")
+    }
+    return EmoteHooks(connection, binder, setterIndex, source, field)
+}
+
+internal fun validateEmoteConnection(connection: Method) {
+    val channelType = connection.parameterTypes.firstOrNull()?.toString()
+    if (channelType !in setOf("Ljava/lang/String;", CHANNEL_ID) ||
+        !connection.isInstance(listOf(channelType ?: "", "Ljava/lang/String;"), "V"))
+        throw PatchException("Emotes: unsupported chat connection parameters.")
     if (connection.code().lastOrNull()?.opcode != Opcode.RETURN_VOID ||
-        connection.references().filterIsInstance<FieldReference>().none { it.name == "channelId" && it.type == "Ljava/lang/String;" })
+        connection.references().filterIsInstance<FieldReference>().none { it.name == "channelId" &&
+            it.type == channelType && it.definingClass == connection.definingClass })
         throw PatchException("Emotes: chat connection channel ID contract changed.")
     val channelAssignment = connection.code().filter { it.opcode == Opcode.IPUT_OBJECT &&
         ((it as? ReferenceInstruction)?.reference as? FieldReference)?.name == "channelId" }.uniqueHook("chat channel ID assignment")
@@ -51,7 +70,6 @@ internal fun BytecodePatchContext.resolveEmoteHooks(): EmoteHooks {
         channelAssignment.registerB != connectionParameters || connection.code().any {
             it.opcode.setsRegister() && it is OneRegisterInstruction && it.registerA in connectionParameters + 1..connectionParameters + 2
         }) throw PatchException("Emotes: chat connection constructor no longer preserves its channel arguments.")
-    return EmoteHooks(connection, binder, setterIndex, source, field)
 }
 
 internal fun sourceChannelField(method: Method): FieldReference {

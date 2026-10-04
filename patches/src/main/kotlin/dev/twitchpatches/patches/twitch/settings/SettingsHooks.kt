@@ -47,15 +47,7 @@ internal fun BytecodePatchContext.resolveSettingsHooks(): SettingsHooks {
     }
     val root = roots.distinctBy { it.toString() }.uniqueHook("native settings composition root")
     val owner = classDefBy(root.definingClass)
-    val row = owner.methods.filter { method ->
-        val params = method.parameterTypes.map { it.toString() }
-        method.returnType == "V" && AccessFlags.PUBLIC.isSet(method.accessFlags) &&
-            AccessFlags.STATIC.isSet(method.accessFlags) && params.size == 8 &&
-            params.take(2) == listOf("Ljava/lang/String;", "Ljava/lang/String;") &&
-            params[2].startsWith("L") && params[3] == "I" && params[4] == owner.type &&
-            params[5].startsWith("L") && params.takeLast(2) == listOf("I", "I") &&
-            method.implementation != null && !AccessFlags.SYNTHETIC.isSet(method.accessFlags)
-    }.uniqueHook("native settings row renderer")
+    val row = owner.methods.filter(::isSettingsRow).uniqueHook("native settings row renderer")
     val callback = row.parameterTypes[2].toString()
     val composer = row.parameterTypes[5].toString()
     validateCallback(callback)
@@ -92,6 +84,16 @@ internal fun BytecodePatchContext.resolveSettingsHooks(): SettingsHooks {
         throw PatchException("Patch settings: native Unit field is inaccessible.")
     }
     return SettingsHooks(group, row, rowIndex, register, callback, composer, unit)
+}
+
+internal fun isSettingsRow(method: Method): Boolean {
+    val params = method.parameterTypes.map { it.toString() }
+    return method.returnType == "V" && AccessFlags.PUBLIC.isSet(method.accessFlags) &&
+        AccessFlags.STATIC.isSet(method.accessFlags) && params.size == 8 &&
+        params.take(2) == listOf("Ljava/lang/String;", "Ljava/lang/String;") &&
+        params[2].startsWith("L") && params[3] == "I" && params[4].startsWith("L") &&
+        params[5].startsWith("L") && params.takeLast(2) == listOf("I", "I") &&
+        method.implementation != null && !AccessFlags.SYNTHETIC.isSet(method.accessFlags)
 }
 
 internal fun rowComposerRegister(method: Method, index: Int): Int {
