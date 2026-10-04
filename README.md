@@ -19,6 +19,9 @@ Select each feature independently when patching. Included features appear under 
 | Playback diagnostics | Records playlist structure and playback frame counters. Disabled by default. |
 | Inspect Twitch APK | Reports package, version and DEX class count during patching. Does not change the app. |
 
+Feature patches include Firebase registration compatibility for the re-signed
+app. This is applied automatically, without a separate patch or setting.
+
 ## Compatibility
 
 The current development target is **Twitch 31.3.0 (3103006)**. Device evaluation covers ARM64 on Android 13, native players, Classic Split, Vertical View and the swipe feed. See [compatibility data](config/compatibility.json) for exact evidence and remaining checks.
