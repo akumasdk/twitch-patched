@@ -49,7 +49,8 @@ private fun generatePatchList(version: String, patches: Set<Patch<*>>) {
                     apkFileType = compat.apkFileType?.name,
                     appIconColor = compat.appIconColor?.let { "#%06X".format(it) },
                     signatures = compat.signatures,
-                    targets = compat.targets.map { target ->
+                    // The community directory displays the last target; runtime order stays unchanged.
+                    targets = compat.targets.reversed().map { target ->
                         JsonCompatibility.Target(
                             version = target.version,
                             versionCodes = target.versionCodes?.mapKeys { it.key.name },

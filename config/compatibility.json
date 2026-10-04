@@ -201,7 +201,7 @@
   "knownLimitations": {
     "streamAds": "Unmatched-media midroll failure under investigation.",
     "storyAds": "Not covered.",
-    "clientAdRequests": "Optional native path; incremental coverage is unverified and setting changes require a restart.",
+    "clientAdRequests": "Native request suppression; incremental coverage is unverified and setting changes require a restart.",
     "googlePlayBilling": "Unavailable in the evaluated re-signed app.",
     "reload": "Native reload reuses the current SDK source."
   },
@@ -212,6 +212,13 @@
     "morpheManager": "1.33.0",
     "javaKotlinTests": 152,
     "javaScriptTests": 12,
+    "adDefaults": {
+      "date": "2026-10-05",
+      "androidApi": 33,
+      "scope": "Compiled extension executed on Android without changing Twitch app data.",
+      "result": "Fresh preferences enable all selected ad features. Saved on/off choices are retained and unselected features remain inactive.",
+      "defaultSelection": "All eight feature patches selected; inspection and diagnostics optional."
+    },
     "androidResourceParsing": {
       "androidApis": [
         33,
