@@ -51,7 +51,12 @@ The workflow uses semantic-release. With `PATCH_RELEASES_ENABLED=true`, pushes t
 
 The highest version increment among the included commits wins. Commit subjects
 form the release notes. The workflow generates `CHANGELOG.md`, patch metadata and
-`.mpp` assets; public releases also receive build attestations.
+`.mpp` assets; public releases also receive build attestations. Builds and tests
+run before publication. Release runs share a queue across `dev` and `main`.
+
+The automatic run starts after a push or merge. Use **Run workflow** to retry a
+failed run or release changes already on the branch. A second run checks for
+unreleased commits before publishing.
 
 Existing release notes can be edited in GitHub. Keep the corresponding historical
 `CHANGELOG.md` entry in sync and retain the release tag and asset version.
