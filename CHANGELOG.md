@@ -1,3 +1,21 @@
+## [1.0.1](https://github.com/ryykitty/twitch-patched/compare/v1.0.0...v1.0.1) (2026-10-04)
+
+### Bug Fixes
+
+* restore Firebase push registration after patching ([b72dbef](https://github.com/ryykitty/twitch-patched/commit/b72dbef984f2239642be5897cdbf908580cca324))
+
+## [1.0.1](https://github.com/ryykitty/twitch-patched/compare/v1.0.0...v1.0.1) (2026-10-04)
+
+### Bug Fixes
+
+* restore Firebase push registration after patching ([b72dbef](https://github.com/ryykitty/twitch-patched/commit/b72dbef984f2239642be5897cdbf908580cca324))
+
+## [1.0.1-dev.1](https://github.com/ryykitty/twitch-patched/compare/v1.0.0...v1.0.1-dev.1) (2026-10-03)
+
+### Bug Fixes
+
+* restore Firebase push registration after patching ([b72dbef](https://github.com/ryykitty/twitch-patched/commit/b72dbef984f2239642be5897cdbf908580cca324))
+
 ## 1.0.0 (2026-10-03)
 
 ### Features
