@@ -2,11 +2,9 @@ package dev.twitchpatches.patches.twitch.settings
 
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.resourcePatch
-import java.io.StringReader
-import javax.xml.parsers.DocumentBuilderFactory
+import dev.twitchpatches.patches.twitch.shared.parseResourceXml
 import org.w3c.dom.Document
 import org.w3c.dom.Element
-import org.xml.sax.InputSource
 
 private const val TYPOGRAPHY = "tv.twitch.android.core.ui.kit.principles.typography."
 private const val ANDROID = "http://schemas.android.com/apk/res/android"
@@ -31,7 +29,7 @@ internal val nativeSettingsResourcesPatch = resourcePatch {
 }
 
 internal fun validateSettingsLayout(source: String, expected: Map<String, String>, includes: Set<String> = emptySet()) {
-    val elements = settingsXml(source).elements()
+    val elements = parseResourceXml(source, namespaceAware = true).elements()
     expected.forEach { (id, tag) ->
         val matches = elements.filter { it.getAttributeNS(ANDROID, "id").substringAfter('/') == id }
         if (matches.size != 1 || matches.single().tagName != tag)
@@ -44,20 +42,10 @@ internal fun validateSettingsLayout(source: String, expected: Map<String, String
 }
 
 internal fun validateSettingsSymbols(source: String, required: Set<Pair<String, String>>) {
-    val symbols = settingsXml(source).elements().filter { it.tagName == "public" }
+    val symbols = parseResourceXml(source, namespaceAware = true).elements().filter { it.tagName == "public" }
         .map { it.getAttribute("type") to it.getAttribute("name") }.toSet()
     val missing = required - symbols
     if (missing.isNotEmpty()) throw PatchException("Native settings resources missing: ${missing.joinToString { "${it.first}/${it.second}" }}.")
-}
-
-private fun settingsXml(source: String): Document {
-    val factory = DocumentBuilderFactory.newInstance().apply {
-        isNamespaceAware = true
-        setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
-        setFeature("http://xml.org/sax/features/external-general-entities", false)
-        setFeature("http://xml.org/sax/features/external-parameter-entities", false)
-    }
-    return factory.newDocumentBuilder().parse(InputSource(StringReader(source)))
 }
 
 private fun Document.elements(): List<Element> {
