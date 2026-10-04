@@ -24,13 +24,11 @@ app. This is applied automatically, without a separate patch or setting.
 
 ## Compatibility
 
-The current development target is **Twitch 31.3.0 (3103006)**. Device evaluation covers ARM64 on Android 13, native players, Classic Split, Vertical View and the swipe feed. See [compatibility data](config/compatibility.json) for exact evidence and remaining checks.
+The current development target is **Twitch 31.4.2 (3104026)**. Support for **31.3.0 (3103006)** is retained. Evaluation uses ARM64 on Android 13; extended playback and feature checks for 31.4.2 are pending. See [compatibility data](config/compatibility.json) for exact evidence and remaining checks.
 
 Ad blocking is under evaluation. Google Play billing is unavailable in the re-signed app.
 
 Other versions and ABIs require their own hook and device verification.
-
-31.4.2 is the next planned target.
 
 ## Using the patches
 
