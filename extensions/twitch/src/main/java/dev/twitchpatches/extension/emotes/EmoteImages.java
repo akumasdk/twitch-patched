@@ -55,7 +55,9 @@ final class EmoteImages {
     private void load(Emote emote, long ticket) {
         Image image = null;
         try { image = decode(EmoteHttp.get(emote.url, 1024 * 1024, false)); }
-        catch (IOException | IllegalArgumentException error) { android.util.Log.w("TwitchPatchesEmotes", "Emote image unavailable"); }
+        catch (IOException | IllegalArgumentException error) {
+            android.util.Log.w("TwitchPatchesEmotes", "Emote image unavailable url=" + emote.url, error);
+        }
         synchronized (this) {
             if (ticket != generation) return;
             pending.remove(emote.url);
