@@ -48,6 +48,8 @@ public class EmoteCatalogTest {
             catalog.ensure("11");
             assertTrue(ready.await(2, TimeUnit.SECONDS));
             assertTrue(failed.await(2, TimeUnit.SECONDS));
+            long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(2);
+            while (!catalog.snapshot("11").containsKey("ChannelCode") && System.nanoTime() < deadline) Thread.sleep(10);
             assertTrue(catalog.snapshot("11").containsKey("ChannelCode"));
             for (int i = 0; i < 100; i++) catalog.ensure("11");
             assertTrue(attempts.get() <= 2);
