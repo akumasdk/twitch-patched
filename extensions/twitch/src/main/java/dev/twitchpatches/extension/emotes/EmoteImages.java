@@ -34,7 +34,7 @@ final class EmoteImages {
 
     synchronized Drawable drawable(android.content.res.Resources resources, String url) {
         Image image = memory.get(url);
-        return image == null ? null : image.state.newDrawable(resources).mutate();
+        return image == null ? null : image.newDrawable(resources);
     }
 
     synchronized void request(Emote emote) {
@@ -73,9 +73,16 @@ final class EmoteImages {
     }
 
     private static Image decode(byte[] bytes) throws IOException {
-        Drawable drawable;
+        Drawable drawable = decodeDrawableOnly(bytes);
+        Drawable.ConstantState state = drawable.getConstantState();
+        int cost = Build.VERSION.SDK_INT >= 28 && drawable instanceof AnimatedImageDrawable ? 1024 * 1024
+                : Math.max(1, drawable.getIntrinsicWidth() * drawable.getIntrinsicHeight() * 4);
+        return new Image(state, bytes, drawable, cost);
+    }
+
+    private static Drawable decodeDrawableOnly(byte[] bytes) throws IOException {
         if (Build.VERSION.SDK_INT >= 28) {
-            drawable = ImageDecoder.decodeDrawable(ImageDecoder.createSource(ByteBuffer.wrap(bytes)), (decoder, info, source) -> {
+            return ImageDecoder.decodeDrawable(ImageDecoder.createSource(ByteBuffer.wrap(bytes)), (decoder, info, source) -> {
                 int width = info.getSize().getWidth();
                 int height = info.getSize().getHeight();
                 if (width <= 0 || height <= 0 || width > 2048 || height > 2048) throw new IllegalArgumentException("Emote dimensions exceed bounds.");
@@ -93,18 +100,33 @@ final class EmoteImages {
             while (Math.max(options.outWidth, options.outHeight) / options.inSampleSize > 128) options.inSampleSize *= 2;
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
             if (bitmap == null) throw new IOException("Emote image could not be decoded.");
-            drawable = new BitmapDrawable(android.content.res.Resources.getSystem(), bitmap);
+            return new BitmapDrawable(android.content.res.Resources.getSystem(), bitmap);
         }
-        Drawable.ConstantState state = drawable.getConstantState();
-        if (state == null) throw new IOException("Emote drawable cannot be isolated.");
-        int cost = Build.VERSION.SDK_INT >= 28 && drawable instanceof AnimatedImageDrawable ? 1024 * 1024
-                : Math.max(1, drawable.getIntrinsicWidth() * drawable.getIntrinsicHeight() * 4);
-        return new Image(state, cost);
     }
 
     private static final class Image {
         final Drawable.ConstantState state;
+        final byte[] bytes;
+        final Drawable fallback;
         final int cost;
-        Image(Drawable.ConstantState state, int cost) { this.state = state; this.cost = cost; }
+
+        Image(Drawable.ConstantState state, byte[] bytes, Drawable fallback, int cost) {
+            this.state = state;
+            this.bytes = bytes;
+            this.fallback = fallback;
+            this.cost = cost;
+        }
+
+        Drawable newDrawable(android.content.res.Resources resources) {
+            if (state != null) {
+                return state.newDrawable(resources).mutate();
+            }
+            if (bytes != null) {
+                try {
+                    return decodeDrawableOnly(bytes);
+                } catch (Exception ignored) { }
+            }
+            return fallback;
+        }
     }
 }
