@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-10-05T18:06:17",
-  "description": "## [1.1.2](https://github.com/akumasdk/twitch-patched/compare/v1.1.1...v1.1.2) (2026-10-05)\n\n### Bug Fixes\n\n* add fallback handling for emote drawable creation ([37ee24d](https://github.com/akumasdk/twitch-patched/commit/37ee24d68e33cfa1858935ef75161c4e36afc6b5))",
-  "download_url": "https://github.com/akumasdk/twitch-patched/releases/download/v1.1.2/patches-1.1.2.mpp",
+  "created_at": "2026-10-05T18:23:57",
+  "description": "## [1.1.3](https://github.com/akumasdk/twitch-patched/compare/v1.1.2...v1.1.3) (2026-10-05)\n\n### Bug Fixes\n\n* set infinite repeat count for animated emotes ([d2cb9ee](https://github.com/akumasdk/twitch-patched/commit/d2cb9eeebd7ac9531cf4d7d3bfa5871be77a9f88))",
+  "download_url": "https://github.com/akumasdk/twitch-patched/releases/download/v1.1.3/patches-1.1.3.mpp",
   "signature_download_url": "",
-  "version": "1.1.2"
+  "version": "1.1.3"
 }

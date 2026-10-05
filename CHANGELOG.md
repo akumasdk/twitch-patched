@@ -1,3 +1,9 @@
+## [1.1.3](https://github.com/akumasdk/twitch-patched/compare/v1.1.2...v1.1.3) (2026-10-05)
+
+### Bug Fixes
+
+* set infinite repeat count for animated emotes ([d2cb9ee](https://github.com/akumasdk/twitch-patched/commit/d2cb9eeebd7ac9531cf4d7d3bfa5871be77a9f88))
+
 ## [1.1.2](https://github.com/akumasdk/twitch-patched/compare/v1.1.1...v1.1.2) (2026-10-05)
 
 ### Bug Fixes
