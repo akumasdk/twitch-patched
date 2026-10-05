@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/akumasdk/twitch-patched/compare/v1.0.0...v1.1.0) (2026-10-05)
+
+### Features
+
+* add FrankerFaceZ emote support ([463d031](https://github.com/akumasdk/twitch-patched/commit/463d031d605d08af1441fa4ff8d3ae72eaaaac56))
+
 ## 1.0.0 (2026-10-05)
 
 ### Bug Fixes
