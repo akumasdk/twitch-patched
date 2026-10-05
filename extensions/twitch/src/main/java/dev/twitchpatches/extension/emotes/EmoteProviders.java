@@ -35,7 +35,7 @@ final class EmoteProviders {
             String code = item.optString("code");
             String id = item.optString("id");
             if (!validCode(code) || !id.matches("[A-Za-z0-9]{1,64}")) continue;
-            boolean animated = item.optBoolean("animated") || "gif".equals(item.optString("imageType"));
+            boolean animated = item.optBoolean("animated") || "gif".equalsIgnoreCase(item.optString("imageType"));
             target.put(code, new Emote(code, "https://cdn.betterttv.net/emote/" + id + "/2x.webp", animated, false));
         }
     }
@@ -55,12 +55,33 @@ final class EmoteProviders {
             if (!validCode(code) || host == null) continue;
             String base = host.optString("url");
             if (base.startsWith("//")) base = "https:" + base;
-            String file = webp(host.optJSONArray("files"));
+            boolean animated = data != null && data.optBoolean("animated");
+            String file = sevenFile(host.optJSONArray("files"), animated);
             if (file == null) continue;
             String url = base + (base.endsWith("/") ? "" : "/") + file;
-            if (imageUrl(url)) result.put(code, new Emote(code, url, data.optBoolean("animated"), (item.optInt("flags") & 1) != 0));
+            if (imageUrl(url)) result.put(code, new Emote(code, url, animated, (item.optInt("flags") & 1) != 0));
         }
         return result;
+    }
+
+    private static String sevenFile(JSONArray files, boolean animated) {
+        if (files == null) return null;
+        String fallback = null;
+        for (int i = 0; i < files.length(); i++) {
+            JSONObject file = files.optJSONObject(i);
+            if (file == null) continue;
+            String name = file.optString("name");
+            String format = file.optString("format");
+            if (file.optInt("width", 0) > 512 || file.optInt("height", 0) > 512) continue;
+            if (animated) {
+                if ("2x.gif".equalsIgnoreCase(name) || ("GIF".equalsIgnoreCase(format) && name.contains("2x"))) return name;
+                if ("2x.webp".equalsIgnoreCase(name) && fallback == null) fallback = name;
+            } else {
+                if ("2x.webp".equalsIgnoreCase(name) && "WEBP".equalsIgnoreCase(format)) return name;
+            }
+            if (fallback == null && ("2x.webp".equalsIgnoreCase(name) || "2x.gif".equalsIgnoreCase(name))) fallback = name;
+        }
+        return fallback != null ? fallback : webp(files);
     }
 
     static Map<String, Emote> ffz(String source, boolean global) throws JSONException {
