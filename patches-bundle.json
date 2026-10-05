@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-10-05T17:31:58",
-  "description": "## [1.1.0](https://github.com/akumasdk/twitch-patched/compare/v1.0.0...v1.1.0) (2026-10-05)\n\n### Features\n\n* add FrankerFaceZ emote support ([463d031](https://github.com/akumasdk/twitch-patched/commit/463d031d605d08af1441fa4ff8d3ae72eaaaac56))",
-  "download_url": "https://github.com/akumasdk/twitch-patched/releases/download/v1.1.0/patches-1.1.0.mpp",
+  "created_at": "2026-10-05T17:51:15",
+  "description": "## [1.1.1](https://github.com/akumasdk/twitch-patched/compare/v1.1.0...v1.1.1) (2026-10-05)\n\n### Bug Fixes\n\n* log emote URL and exception when image is unavailable ([7fefce2](https://github.com/akumasdk/twitch-patched/commit/7fefce20e0c85941f022c5336815f887a72c63ef))",
+  "download_url": "https://github.com/akumasdk/twitch-patched/releases/download/v1.1.1/patches-1.1.1.mpp",
   "signature_download_url": "",
-  "version": "1.1.0"
+  "version": "1.1.1"
 }
