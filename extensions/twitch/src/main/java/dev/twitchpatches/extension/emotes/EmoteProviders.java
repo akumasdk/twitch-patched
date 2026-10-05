@@ -36,7 +36,7 @@ final class EmoteProviders {
             String id = item.optString("id");
             if (!validCode(code) || !id.matches("[A-Za-z0-9]{1,64}")) continue;
             boolean animated = item.optBoolean("animated") || "gif".equalsIgnoreCase(item.optString("imageType"));
-            target.put(code, new Emote(code, "https://cdn.betterttv.net/emote/" + id + "/2x.webp", animated, false));
+            target.put(code, new Emote(code, "https://cdn.betterttv.net/emote/" + id + (animated ? "/2x.gif" : "/2x.webp"), animated, false));
         }
     }
 
