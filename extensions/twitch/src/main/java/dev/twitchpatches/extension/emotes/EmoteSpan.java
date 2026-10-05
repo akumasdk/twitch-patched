@@ -53,7 +53,7 @@ final class EmoteSpan extends ReplacementSpan implements Drawable.Callback {
 
     void start() {
         TextView target = view.get();
-        if (!running && drawable instanceof Animatable && activeAnimations < 16 && target != null && target.isAttachedToWindow() && target.isShown()) {
+        if (!running && drawable instanceof Animatable && activeAnimations < 16 && target != null && target.isAttachedToWindow()) {
             running = true;
             activeAnimations++;
             ((Animatable) drawable).start();
@@ -69,7 +69,7 @@ final class EmoteSpan extends ReplacementSpan implements Drawable.Callback {
 
     @Override public void invalidateDrawable(Drawable source) {
         TextView target = view.get();
-        if (target != null && target.isAttachedToWindow() && target.isShown()) target.invalidate();
+        if (target != null && target.isAttachedToWindow()) target.invalidate();
         else stop();
     }
 

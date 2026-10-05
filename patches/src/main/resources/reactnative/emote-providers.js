@@ -57,25 +57,27 @@
             if (typeof name !== 'string' || !name.length || name.length > 100 || /\s/.test(name)) return;
             var url, staticURL, ratio = 1, format = 'webp';
             if (provider === 'bttv') {
-                if (typeof item.id !== 'string' || !/^[A-Za-z0-9]+$/.test(item.id)) return;
-                url = 'https://cdn.betterttv.net/emote/' + item.id + '/2x';
-                staticURL = url;
-                format = item.imageType === 'gif' ? 'gif' : 'png';
-            } else {
-                var host = item.data && item.data.host;
-                if (!host || typeof host.url !== 'string' || !Array.isArray(host.files)) return;
-                var gif = item.data.animated === true && host.files.find(function (value) { return value && value.name === '2x.gif'; });
-                var file = gif || host.files.find(function (value) { return value && value.name === '2x.webp'; });
-                if (!file) return;
-                var base = host.url.indexOf('//') === 0 ? 'https:' + host.url : host.url;
-                format = gif ? 'gif' : 'webp';
-                // Use GIF: bundled Fresco lacks animated WebP decoding.
-                var fileName = !gif && item.data.animated === true ? file.static_name : file.name;
-                if (typeof fileName !== 'string') return;
-                url = base + '/' + fileName;
-                staticURL = typeof file.static_name === 'string' ? base + '/' + file.static_name : url;
-                if (file.height > 0 && file.width > 0) ratio = Math.min(4, Math.max(0.25, file.width / file.height));
-            }
+            if (typeof item.id !== 'string' || !/^[A-Za-z0-9]+$/.test(item.id)) return;
+            var isAnim = item.animated === true || item.imageType === 'gif';
+            url = 'https://cdn.betterttv.net/emote/' + item.id + (isAnim ? '/2x.gif' : '/2x');
+            staticURL = 'https://cdn.betterttv.net/emote/' + item.id + '/2x';
+            format = isAnim ? 'gif' : (item.imageType === 'gif' ? 'gif' : 'png');
+        } else {
+            var host = item.data && item.data.host;
+            if (!host || typeof host.url !== 'string' || !Array.isArray(host.files)) return;
+            var gif = item.data && item.data.animated === true && host.files.find(function (value) {
+                return value && (value.name === '2x.gif' || value.name === '1x.gif' || value.name === '3x.gif' || value.format === 'GIF');
+            });
+            var file = gif || host.files.find(function (value) { return value && value.name === '2x.webp'; }) || host.files[0];
+            if (!file) return;
+            var base = host.url.indexOf('//') === 0 ? 'https:' + host.url : host.url;
+            format = gif ? 'gif' : 'webp';
+            var fileName = !gif && item.data && item.data.animated === true && typeof file.static_name === 'string' ? file.static_name : file.name;
+            if (typeof fileName !== 'string') return;
+            url = base + '/' + fileName;
+            staticURL = typeof file.static_name === 'string' ? base + '/' + file.static_name : url;
+            if (file.height > 0 && file.width > 0) ratio = Math.min(4, Math.max(0.25, file.width / file.height));
+        }
             if (!safeURL(url) || !safeURL(staticURL)) return;
             result.set(name, {name: name, channel: channel === true, url: url, staticURL: staticURL,
                 ratio: ratio, provider: provider, format: format});
