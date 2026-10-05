@@ -24,7 +24,7 @@ public class EmoteCatalogTest {
                 returned.countDown();
                 return ENTRY;
             }
-            return url.equals(EmoteProviders.BTTV_GLOBAL) ? "[]" : "{}";
+            return url.equals(EmoteProviders.BTTV_GLOBAL) || url.equals(EmoteProviders.SEVEN_GLOBAL) || url.equals(EmoteProviders.FFZ_GLOBAL) ? "[]" : "{}";
         }, () -> { });
         try {
             catalog.ensure("11");
@@ -42,7 +42,7 @@ public class EmoteCatalogTest {
         AtomicInteger attempts = new AtomicInteger();
         EmoteCatalog catalog = new EmoteCatalog(id -> { if (id != null) ready.countDown(); }, (url, optional) -> {
             if (url.contains("7tv")) { attempts.incrementAndGet(); throw new java.io.IOException("Unavailable"); }
-            return optional ? ENTRY : "[]";
+            return optional ? ENTRY : (url.equals(EmoteProviders.BTTV_GLOBAL) ? "[]" : "{}");
         }, failed::countDown);
         try {
             catalog.ensure("11");

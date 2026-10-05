@@ -21,21 +21,42 @@ public class EmoteProvidersTest {
         assertTrue(emote.overlay);
     }
 
+    @Test public void ffzUsesEmoticonsAndRecognizesAnimatedAndModifier() throws Exception {
+        String json = "{\"sets\":{\"1\":{\"emoticons\":[{\"id\":101,\"name\":\"FFZStatic\",\"urls\":{\"1\":\"//cdn.frankerfacez.com/emoticon/101/1\",\"2\":\"//cdn.frankerfacez.com/emoticon/101/2\"}}," +
+                "{\"id\":102,\"name\":\"FFZAnim\",\"modifier\":true,\"urls\":{\"1\":\"//cdn.frankerfacez.com/emoticon/102/1\"}," +
+                "\"animated\":{\"2\":\"//cdn.frankerfacez.com/emoticon/102/animated/2\"}}]}}}";
+        Map<String, Emote> emotes = EmoteProviders.ffz(json, false);
+        assertEquals(2, emotes.size());
+        Emote st = emotes.get("FFZStatic");
+        assertEquals("https://cdn.frankerfacez.com/emoticon/101/2", st.url);
+        assertFalse(st.animated);
+        assertFalse(st.overlay);
+
+        Emote anim = emotes.get("FFZAnim");
+        assertEquals("https://cdn.frankerfacez.com/emoticon/102/animated/2", anim.url);
+        assertTrue(anim.animated);
+        assertTrue(anim.overlay);
+    }
+
     @Test public void malformedEntriesAndUntrustedImageHostsAreIgnored() throws Exception {
         assertTrue(EmoteProviders.bttv("[{\"code\":\"two words\",\"id\":\"ok\"},{\"code\":\"ok\",\"id\":\"../other\"}]", true).isEmpty());
         assertFalse(EmoteProviders.imageUrl("http://cdn.7tv.app/a.webp"));
         assertFalse(EmoteProviders.imageUrl("https://cdn.7tv.app.example/a.webp"));
         assertFalse(EmoteProviders.imageUrl("https://user@cdn.7tv.app/a.webp"));
         assertFalse(EmoteProviders.imageUrl("https://cdn.7tv.app:8080/a.webp"));
+        assertTrue(EmoteProviders.imageUrl("https://cdn.frankerfacez.com/emoticon/1/1"));
+        assertTrue(EmoteProviders.imageUrl("https://cdn.ffz.me/emoticon/1/1"));
     }
 
     @Test public void channelAndProviderPrecedenceIsDeterministic() {
         Emote global = new Emote("Code", "global", false, false);
         Emote bttv = new Emote("Code", "bttv", false, false);
         Emote seven = new Emote("Code", "seven", false, false);
+        Emote ffz = new Emote("Code", "ffz", false, false);
         Map<String, Emote> globals = Collections.singletonMap("Code", global);
-        assertSame(bttv, EmoteCatalog.combine(globals, Collections.singletonMap("Code", bttv), Collections.emptyMap()).get("Code"));
-        assertSame(seven, EmoteCatalog.combine(globals, Collections.singletonMap("Code", bttv), Collections.singletonMap("Code", seven)).get("Code"));
+        assertSame(bttv, EmoteCatalog.combine(globals, Collections.singletonMap("Code", bttv), Collections.emptyMap(), Collections.emptyMap()).get("Code"));
+        assertSame(seven, EmoteCatalog.combine(globals, Collections.singletonMap("Code", bttv), Collections.singletonMap("Code", seven), Collections.emptyMap()).get("Code"));
+        assertSame(ffz, EmoteCatalog.combine(globals, Collections.singletonMap("Code", bttv), Collections.singletonMap("Code", seven), Collections.singletonMap("Code", ffz)).get("Code"));
         assertSame(global, globals.get("Code"));
     }
 
@@ -49,5 +70,6 @@ public class EmoteProvidersTest {
     @Test public void absentProviderChannelIsAnEmptyCatalog() throws Exception {
         assertTrue(EmoteProviders.bttv("{}", false).isEmpty());
         assertTrue(EmoteProviders.sevenTv("{}", false).isEmpty());
+        assertTrue(EmoteProviders.ffz("{}", false).isEmpty());
     }
 }

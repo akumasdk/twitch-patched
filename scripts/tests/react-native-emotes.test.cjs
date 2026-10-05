@@ -28,9 +28,21 @@ function seven(name, id = 'fixture', ratio = 2, animated = false) {
         files: [{name: '2x.webp', static_name: '2x_static.webp', width: ratio * 64, height: 64},
             ...(animated ? [{name: '2x.gif', static_name: '2x_static.gif', width: ratio * 64, height: 64}] : [])]}}};
 }
+function ffz(name, id = 100, isAnim = false) {
+    return {
+        name,
+        urls: {'1': '//cdn.frankerfacez.com/emoticon/' + id + '/1', '2': '//cdn.frankerfacez.com/emoticon/' + id + '/2'},
+        ...(isAnim ? {animated: {'1': '//cdn.frankerfacez.com/emoticon/' + id + '/animated/1', '2': '//cdn.frankerfacez.com/emoticon/' + id + '/animated/2'}} : {})
+    };
+}
 const providers = runtime.emoteProviders;
 const catalog = providers.parse('7tv', {emote_set: {emotes: [seven('Wankge'), seven('Peepoclap')]}}, true);
 assert.equal(catalog.size, 2);
+const ffzCatalog = providers.parse('ffz', {sets: {'1': {emoticons: [ffz('FFZStatic'), ffz('FFZAnim', 200, true)]}}}, true);
+assert.equal(ffzCatalog.size, 2);
+assert.equal(ffzCatalog.get('FFZStatic').url, 'https://cdn.frankerfacez.com/emoticon/100/2');
+assert.equal(ffzCatalog.get('FFZAnim').url, 'https://cdn.frankerfacez.com/emoticon/200/animated/2');
+assert.equal(ffzCatalog.get('FFZAnim').provider, 'ffz');
 const animated = providers.parse('7tv', {emotes: [seven('Animated', 'animated', 1, true)]}, false).get('Animated');
 assert.equal(animated.url, 'https://cdn.7tv.app/emote/animated/2x.gif', 'uses the original native GIF decoder for animation');
 assert.equal(animated.staticURL, 'https://cdn.7tv.app/emote/animated/2x_static.gif');
@@ -70,15 +82,17 @@ const props = {channelID: '123', message: {body: 'Wankge', emotes: [], sourceRoo
 assert.equal(row(props).type, original, 'keeps the original memoized component');
 effects.shift()();
 const release = effects.shift()();
-assert.equal(jobs.length, 4, 'deduplicated global and source-channel provider requests');
+assert.equal(jobs.length, 6, 'deduplicated global and source-channel provider requests');
 const sameRelease = runtime.emotes.retain('456');
-assert.equal(jobs.length, 4, 'new rows share pending requests');
+assert.equal(jobs.length, 6, 'new rows share pending requests');
 async function flush() { for (let count = 0; count < 10; count++) await Promise.resolve(); }
 async function main() {
     jobs[0].resolve([{id: 'global', code: 'Wankge'}]);
     jobs[1].resolve({channelEmotes: []});
     jobs[2].resolve({emotes: []});
     jobs[3].resolve({emote_set: {emotes: [seven('Wankge')]}, ignoredPadding: 'x'.repeat(2500000)});
+    jobs[4].resolve({sets: {}});
+    jobs[5].resolve({sets: {}});
     await flush();
     const rendered = row(props);
     assert.equal(rendered.props.message.emotes.length, 1);
@@ -104,13 +118,14 @@ async function main() {
     assert.equal(calls, 1);
     release(); sameRelease();
     const cancel = runtime.emotes.retain('789');
-    const late = jobs.slice(4); cancel();
+    const late = jobs.slice(6); cancel();
     assert(late.every(job => job.options.signal.aborted), 'unmount cancels channel requests');
     late.forEach(job => job.resolve({emote_set: {emotes: [seven('Late')]}})); await flush();
     assert.equal(runtime.emotes.snapshot('789').has('Late'), false, 'late responses do not publish into a departed channel');
     const releaseOversize = runtime.emotes.retain('888');
-    jobs[jobs.length - 2].resolve({channelEmotes: [{id: 'oversize', code: 'Oversize'}], ignoredPadding: 'x'.repeat(9000000)});
-    jobs[jobs.length - 1].resolve({emote_set: {emotes: [seven('OtherProvider')]}});
+    jobs[jobs.length - 3].resolve({channelEmotes: [{id: 'oversize', code: 'Oversize'}], ignoredPadding: 'x'.repeat(9000000)});
+    jobs[jobs.length - 2].resolve({emote_set: {emotes: [seven('OtherProvider')]}});
+    jobs[jobs.length - 1].resolve({sets: {}});
     await flush();
     assert.equal(runtime.emotes.snapshot('888').has('Oversize'), false, 'catalogs exceeding the upper bound are rejected');
     assert.equal(runtime.emotes.snapshot('888').has('OtherProvider'), true, 'one oversized provider does not erase another provider');
