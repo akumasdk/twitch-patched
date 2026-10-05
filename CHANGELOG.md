@@ -1,3 +1,28 @@
+## 1.0.0 (2026-10-05)
+
+### Bug Fixes
+
+* **build:** preserve Android patch bundles during verification ([ea2bbe8](https://github.com/akumasdk/twitch-patched/commit/ea2bbe8a0ffcf63acb3cb1430f10b3252e0f6eb0))
+* **build:** select the current bundle for release metadata ([03ea818](https://github.com/akumasdk/twitch-patched/commit/03ea8188328b4ee65a23cc8f388047c5bcabf5f4))
+* clarify patch descriptions ([e1971f0](https://github.com/akumasdk/twitch-patched/commit/e1971f0383e88542debb103893fd4a57b8c40119))
+* display Twitch 31.4.2 in the community directory ([bc6dd9f](https://github.com/akumasdk/twitch-patched/commit/bc6dd9f64c5964c1ee9c7373a836cc339bcc353a))
+* prevent overlapping release publication ([d110ebe](https://github.com/akumasdk/twitch-patched/commit/d110ebe87ac2184b344e02821254997a04b1e64f))
+* recognize tested Twitch versions as supported ([d0f67f9](https://github.com/akumasdk/twitch-patched/commit/d0f67f9cf8c922904bfda9aaa292506a01426701))
+* restore Firebase push registration after patching ([b72dbef](https://github.com/akumasdk/twitch-patched/commit/b72dbef984f2239642be5897cdbf908580cca324))
+* select and enable ad blockers by default ([b371d8b](https://github.com/akumasdk/twitch-patched/commit/b371d8bf85ff518e6d52ae7458de7b05235829df))
+* support XML resource parsing in Morphe Manager ([bcb4fbd](https://github.com/akumasdk/twitch-patched/commit/bcb4fbd4836675c643fcda26a59bcbdd029946c4))
+* update settings, chat and ad hooks for Twitch 31.4.2 ([a9b9638](https://github.com/akumasdk/twitch-patched/commit/a9b9638344434884d4c0f7193b5be0f2b66b35d7))
+
+### Features
+
+* add FrankerFaceZ emote support ([e9f5fb4](https://github.com/akumasdk/twitch-patched/commit/e9f5fb4d04cb4d70d01c638d75eadae0643708d1))
+* add FrankerFaceZ emote support ([9edaf0d](https://github.com/akumasdk/twitch-patched/commit/9edaf0dc496583be0b36795d831e923c3f044098))
+* add Twitch Android patch baseline ([c23a4aa](https://github.com/akumasdk/twitch-patched/commit/c23a4aa41e56edfd351e7ea1109690801e24e0c0))
+
+### App Support
+
+* add Twitch 31.4.2 compatibility ([db8637b](https://github.com/akumasdk/twitch-patched/commit/db8637bc938ad0d3a25c784b6dc6723128300928))
+
 ## [1.0.4](https://github.com/ryykitty/twitch-patched/compare/v1.0.3...v1.0.4) (2026-10-04)
 
 ### Bug Fixes

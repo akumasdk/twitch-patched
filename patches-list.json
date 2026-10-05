@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.0.4",
+  "version": "1.0.0",
   "patches": [
     {
       "name": "Auto-claim bonus channel points",
@@ -41,7 +41,7 @@
       "options": []
     },
     {
-      "name": "BTTV and 7TV emotes",
+      "name": "BTTV, FrankerFaceZ, and 7TV emotes",
       "description": "Renders global and channel emotes in chat with provider previews on tap.",
       "default": true,
       "category": null,
