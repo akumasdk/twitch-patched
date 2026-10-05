@@ -82,7 +82,7 @@ final class EmoteImages {
 
     private static Drawable decodeDrawableOnly(byte[] bytes) throws IOException {
         if (Build.VERSION.SDK_INT >= 28) {
-            return ImageDecoder.decodeDrawable(ImageDecoder.createSource(ByteBuffer.wrap(bytes)), (decoder, info, source) -> {
+            Drawable drawable = ImageDecoder.decodeDrawable(ImageDecoder.createSource(ByteBuffer.wrap(bytes)), (decoder, info, source) -> {
                 int width = info.getSize().getWidth();
                 int height = info.getSize().getHeight();
                 if (width <= 0 || height <= 0 || width > 2048 || height > 2048) throw new IllegalArgumentException("Emote dimensions exceed bounds.");
@@ -90,6 +90,10 @@ final class EmoteImages {
                 float scale = Math.min(1f, 128f / Math.max(width, height));
                 decoder.setTargetSize(Math.max(1, Math.round(width * scale)), Math.max(1, Math.round(height * scale)));
             });
+            if (drawable instanceof AnimatedImageDrawable) {
+                ((AnimatedImageDrawable) drawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
+            }
+            return drawable;
         } else {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;

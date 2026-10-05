@@ -3,6 +3,7 @@ package dev.twitchpatches.extension.emotes;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.AnimatedImageDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -54,6 +55,9 @@ final class EmoteSpan extends ReplacementSpan implements Drawable.Callback {
     void start() {
         TextView target = view.get();
         if (!running && drawable instanceof Animatable && activeAnimations < 16 && target != null && target.isAttachedToWindow()) {
+            if (android.os.Build.VERSION.SDK_INT >= 28 && drawable instanceof AnimatedImageDrawable) {
+                ((AnimatedImageDrawable) drawable).setRepeatCount(AnimatedImageDrawable.REPEAT_INFINITE);
+            }
             running = true;
             activeAnimations++;
             ((Animatable) drawable).start();
