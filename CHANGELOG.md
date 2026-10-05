@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/akumasdk/twitch-patched/compare/v1.1.0...v1.1.1) (2026-10-05)
+
+### Bug Fixes
+
+* log emote URL and exception when image is unavailable ([7fefce2](https://github.com/akumasdk/twitch-patched/commit/7fefce20e0c85941f022c5336815f887a72c63ef))
+
 ## [1.1.0](https://github.com/akumasdk/twitch-patched/compare/v1.0.0...v1.1.0) (2026-10-05)
 
 ### Features
