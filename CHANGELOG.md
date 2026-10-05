@@ -1,3 +1,9 @@
+## [1.1.2](https://github.com/akumasdk/twitch-patched/compare/v1.1.1...v1.1.2) (2026-10-05)
+
+### Bug Fixes
+
+* add fallback handling for emote drawable creation ([37ee24d](https://github.com/akumasdk/twitch-patched/commit/37ee24d68e33cfa1858935ef75161c4e36afc6b5))
+
 ## [1.1.1](https://github.com/akumasdk/twitch-patched/compare/v1.1.0...v1.1.1) (2026-10-05)
 
 ### Bug Fixes
